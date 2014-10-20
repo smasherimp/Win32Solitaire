@@ -1,5 +1,13 @@
 #pragma once
 
+enum m_eCardSuits
+{
+	hearts,
+	diamonds,
+	clubs,
+	spades
+};
+
 class CCards
 {
 public:
@@ -7,19 +15,15 @@ public:
 	~CCards(void);
 	void SetValue(int);
 	int GetValue();
-	void SetSuit(int);
+	void SetSuit(m_eCardSuits);
 	int GetSuit();
-	void RevealCard();
+	void FlipCard();
 
 private:
 	int m_iCardValue;
-	enum m_eCardSuits
-	{
-		hearts,
-		diamonds,
-		clubs,
-		spades
-	};
+	m_eCardSuits m_eChosenSuit;
 	bool m_bFaceUp;
+
+
 };
 

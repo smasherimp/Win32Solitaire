@@ -1,7 +1,11 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h> // Include all the windows headers.
 #include <windowsx.h> // Include useful macros.
+#include<string>
+#include<vector>
+#include <algorithm>
 #include"Cards.h"
+using namespace std;
 
 #define WINDOW_CLASS_NAME L"WINCLASS1"
 
@@ -13,6 +17,31 @@ LRESULT CALLBACK WindowProc(HWND _hwnd,
 	// This is the main message handler of the system.
 	PAINTSTRUCT ps; // Used in WM_PAINT.
 	HDC hdc; // Handle to a device context.
+	CCards testCard;
+	RECT rec;
+	wchar_t buffer[255];
+	
+
+	testCard.SetSuit(clubs);
+	testCard.GetSuit();
+	testCard.FlipCard();
+	testCard.FlipCard();
+	vector<CCards> deck;
+
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 1; j <= 13; j++)
+		{
+			
+			CCards* tempCard = new CCards;
+			tempCard->SetSuit((m_eCardSuits)i);
+			tempCard->SetValue(j);
+			deck.push_back(*tempCard);
+		}
+	}
+
+	//SHUFFLE
+	random_shuffle(deck.begin(),deck.end());
 
 	// What is the message?
 	switch (_msg)
@@ -21,6 +50,7 @@ LRESULT CALLBACK WindowProc(HWND _hwnd,
 		{
 			// Do initialization stuff here.
 			// Return Success.
+			
 			return (0);
 		}
 		break;
@@ -29,6 +59,10 @@ LRESULT CALLBACK WindowProc(HWND _hwnd,
 			// Simply validate the window.
 			hdc = BeginPaint(_hwnd, &ps);
 			// You would do all your painting here...
+			//DrawText(hdc, itostr(testCard.GetSuit()),strlen("Text Out String"), &rec, DT_TOP|DT_LEFT);
+			//swprintf_s(buffer, _countof(buffer), L"Blah blah blah %ld", testCard.GetSuit(););
+			DrawText(hdc, buffer, -1, &rec, DT_CENTER | DT_WORDBREAK);
+
 			EndPaint(_hwnd, &ps);
 			// Return Success.
 			return (0);
@@ -66,7 +100,7 @@ int WINAPI WinMain(HINSTANCE _hInstance, HINSTANCE _hPrevInstance, LPSTR _lpCmdL
 	winclass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
 	winclass.hCursor = LoadCursor(NULL, IDC_ARROW);
 	winclass.hbrBackground = CreateSolidBrush(RGB(0,128,0));
-	//static_cast<HBRUSH>(GetStockObject(RGB(0,180,0)));
+	//static_cast<HBRUSH>(GetStockObject(BLACK_BRUSH));
 	winclass.lpszMenuName = NULL;
 	winclass.lpszClassName = WINDOW_CLASS_NAME;
 	winclass.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
