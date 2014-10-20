@@ -26,7 +26,9 @@ LRESULT CALLBACK WindowProc(HWND _hwnd,
 	testCard.GetSuit();
 	testCard.FlipCard();
 	testCard.FlipCard();
-	vector<CCards> deck;
+	vector<CCards> deck,revealpile,heartpile,diamondpile,spadepile,clubpile;
+	vector<vector<CCards>> playingspace[7];
+	int cardDraw = 1;
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -42,6 +44,19 @@ LRESULT CALLBACK WindowProc(HWND _hwnd,
 
 	//SHUFFLE
 	random_shuffle(deck.begin(),deck.end());
+
+	for (int i = 0; i< 7; i++)
+	{
+		vector<CCards> temp;
+		playingspace[i];
+		for (int j = 0; j<1+i;j++)
+		{
+			temp.push_back(deck.back());
+			deck.pop_back();
+		}
+		playingspace[i].push_back(temp);
+		playingspace[i].back().back().FlipCard();
+	}
 
 	// What is the message?
 	switch (_msg)
@@ -66,6 +81,29 @@ LRESULT CALLBACK WindowProc(HWND _hwnd,
 			EndPaint(_hwnd, &ps);
 			// Return Success.
 			return (0);
+		}
+		break;
+		case WM_LBUTTONDOWN:
+		{
+			if (!deck.empty())
+			{
+				for(int i = 0; i<cardDraw; i++)
+				{
+					revealpile.push_back(deck.back());
+					revealpile.back().FlipCard();
+					deck.pop_back();
+					
+				}
+			}
+			else
+			{
+				for(int i = 0; i<revealpile.size();i++)
+				{
+					deck.push_back(revealpile.back());
+					deck.back().FlipCard();
+					revealpile.pop_back();
+				}
+			}
 		}
 		break;
 		case WM_DESTROY:
